@@ -52,7 +52,8 @@ def load_tables(paths):
     eval_foreign_key_maps = {}
 
     for path in paths:
-        schema_dicts = json.load(open(path))
+        with open(path) as fp:
+            schema_dicts = json.load(fp)
         for schema_dict in schema_dicts:
             tables = tuple(
                 Table(id=i, name=name.split(), unsplit_name=name, orig_name=orig_name,)
@@ -129,7 +130,8 @@ class SpiderDataset(dataset.Dataset):
         self.schemas, self.eval_foreign_key_maps = load_tables(tables_paths)
 
         for path in paths:
-            raw_data = json.load(open(path))
+            with open(path) as fp:
+                raw_data = json.load(fp)
             for entry in raw_data:
                 item = SpiderItem(
                     text=entry["question_toks"],
